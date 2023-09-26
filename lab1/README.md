@@ -119,4 +119,43 @@ Or we can use Docker Desktop again to do the same. Create a volume and the when 
 
 To inspect a volume: $ docker volume inspect {$volumeName}
 
+DOCKER COMPOSE
 
+After having our Dockerfile we can create a compose.yaml file. 
+A docker compose file is used to run multi-container Docker applications.
+Example:
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+  redis:
+    image: "redis:alpine"
+    
+This file has 2 services: web and redis
+web -> uses image from Dockerfile
+redis -> uses a public Redis image pulled from Docker Hub
+
+docker compose up --> Starts up the app
+Using docker image ls we can see both images
+Inspect them by using docker inspect <tag or id>
+docker compose down --> Stop the app
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/code
+    environment:
+      FLASK_DEBUG: "true"
+  redis:
+    image: "redis:alpine"
+Volumes mounts the project directory on the host to /code inside the container, allowing us to modify the code on the fly without rebuild.
+Environment sets the FLASK_DEBUG environment variable -> tells flask to run in development mode and reload the code on change
+
+docker compose up -d --> Run the services in the background
+docker compose run (web env) run one off commands from the server
+docker compose stop --> stop the services once they are finnished
+docker compose down --volumes --> Bring everything down, removing the containers entirely. --volumes removes the data volume used (Redis container)
