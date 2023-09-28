@@ -1,0 +1,33 @@
+2023-09-27 18:39:31 INFO  Starting periodic forecast requests
+w2023-09-27 18:39:31 INFO  Requesting forecast for a random city
+w2023-09-27 18:39:31 INFO  Printing results
+w2023-09-27 18:39:31 INFO  Sleeping for 20 seconds
+w2023-09-27 18:46:50 INFO  Starting periodic forecast requests
+w2023-09-27 18:46:50 INFO  Requesting forecast for a random city
+w2023-09-27 18:46:50 INFO  Printing results
+w2023-09-27 18:46:50 INFO  Sleeping for 20 seconds
+w2023-09-27 18:53:21 INFO  Starting periodic forecast requests
+w2023-09-27 18:53:21 INFO  Requesting forecast for a random city
+w2023-09-27 18:53:26 INFO  Printing results
+w2023-09-27 18:53:26 INFO  Sleeping for 20 seconds
+w2023-09-27 18:57:07 INFO  Starting periodic forecast requests
+w2023-09-27 18:57:07 INFO  Requesting forecast for a random city
+w2023-09-27 18:57:08 INFO  Printing results
+w2023-09-27 18:57:08 INFO  Sleeping for 20 seconds
+w2023-09-27 18:57:13 INFO  Starting periodic forecast requests
+w2023-09-27 18:57:13 INFO  Requesting forecast for a random city
+w2023-09-27 18:57:13 INFO  Printing results
+w2023-09-27 18:57:13 INFO  Sleeping for 20 seconds
+w2023-09-27 18:57:34 INFO  Starting periodic forecast requests
+w2023-09-27 18:57:34 INFO  Requesting forecast for a random city
+w2023-09-27 18:57:34 INFO  Printing results
+w2023-09-27 18:57:34 INFO  Sleeping for 20 seconds
+w2023-09-27 18:57:54 INFO  Forecast request number 1
+w2023-09-27 18:57:54 INFO  Requesting forecast for a random city
+w2023-09-27 18:57:54 INFO  Printing results
+w2023-09-27 18:57:54 INFO  Sleeping for 20 seconds
+w2023-09-27 18:59:40 INFO  Starting periodic forecast requests
+w2023-09-27 18:59:40 INFO  Requesting forecast for a random city
+w2023-09-27 18:59:40 INFO  Printing results
+w2023-09-27 18:59:40 INFO  Sleeping for 20 seconds
+w

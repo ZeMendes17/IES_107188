@@ -1,0 +1,15 @@
+2023-09-26 17:43:10 INFO  Starting periodic forecast requests
+w2023-09-26 17:43:10 INFO  Requesting forecast for a random city
+w2023-09-26 17:43:12 INFO  Printing results
+w2023-09-26 17:43:12 INFO  Sleeping for 20 seconds
+w2023-09-26 18:44:46 INFO  Starting periodic forecast requests
+w2023-09-26 18:44:46 INFO  Requesting forecast for a random city
+w2023-09-26 18:44:47 INFO  Printing results
+w2023-09-26 18:44:47 INFO  Sleeping for 20 seconds
+w2023-09-26 18:45:07 INFO  Forecast request number 1
+w2023-09-26 18:45:07 INFO  Requesting forecast for a random city
+w2023-09-26 18:45:10 INFO  Printing results
+w2023-09-26 18:45:10 INFO  Sleeping for 20 seconds
+w2023-09-26 18:45:30 INFO  Forecast request number 2
+w2023-09-26 18:45:30 INFO  Requesting forecast for a random city
+w

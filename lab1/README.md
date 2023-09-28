@@ -159,3 +159,23 @@ docker compose up -d --> Run the services in the background
 docker compose run (web env) run one off commands from the server
 docker compose stop --> stop the services once they are finnished
 docker compose down --volumes --> Bring everything down, removing the containers entirely. --volumes removes the data volume used (Redis container)
+
+
+USING DOCKER ON A MAVEN PROJECT
+falar da ceninha da dependencia de um para o outro com mvn install
+o jar da para por no docker é preciso adicionar ao pom :
+<plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>ua.pt.AnyCityForecast</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            dentro de plugins dentro de build
