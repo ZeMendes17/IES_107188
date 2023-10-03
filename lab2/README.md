@@ -103,3 +103,8 @@ services:
 > **Note**: We can use the `docker-compose up` command to run the server
 
 While the server is running, we can access the manager page in the browser: `http://127.0.0.1:8888/JakartaWebStarter-1.0-SNAPSHOT/hello-servlet`
+
+# Spring Boot
+
+It is useful to get started with minimum effort and create stand-alone, production-grade
+applications.
