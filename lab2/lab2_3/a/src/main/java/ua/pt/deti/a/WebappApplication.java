@@ -1,4 +1,4 @@
-package ua.pt.deti.webapp;
+package ua.pt.deti.a;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

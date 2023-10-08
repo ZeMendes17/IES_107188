@@ -106,5 +106,129 @@ While the server is running, we can access the manager page in the browser: `htt
 
 # Spring Boot
 
-It is useful to get started with minimum effort and create stand-alone, production-grade
-applications.
+It is useful to get started with minimum effort and create stand-alone, production-grade applications.
+
+### How to Create:
+
+We can use the site: **https://start.spring.io/** to create a new (maven-supported String Boot) project, in this case, for our web app, thus we need to add the **Spring Web** dependency. This templates contain a collection of all
+the relevant transitive dependencies that are needed to start a particular functionality and will simplify the setup of the POM.
+Finally just download the template.
+
+After it we should be able to build your application using the regular Maven commands.
+
+It also includes a **Maven wrapper script (mvnw)**.
+
+### How to Run:
+
+```
+$ mvn install -DskipTests && java -jar target\webapp1-0.0.1-SNAPSHOT.jar
+```
+
+OR
+
+```
+$ ./mvnw spring-boot:run
+```
+
+## Building a Simple Application to Serve Web Content
+
+Go to **https://start.spring.io/** once more, but this time we will add the dependencies: **Spring Web**, **Thymeleaf**, and **Spring Boot DevTools**.
+
+In Spring’s approach to building web sites, HTTP requests are handled by a **controller**. We can easily identify the controller by the **@Controller** annotation.
+
+In the following example, **GreetingController** handles **GET** requests for **/greeting** by returning the name of a **View** (in this case, greeting). A **View** is responsible for rendering the HTML content.
+
+```
+@Controller
+public class GreetingController {
+    @GetMapping("/greeting")
+    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+        model.addAttribute("name", name);
+        return "greeting"; 
+    }
+}
+```
+
+> The **@GetMapping** annotation ensures that **HTTP GET requests** to **/greeting** are mapped to the **greeting()** method.
+
+> **@RequestParam** binds the value of the query string parameter name into the name parameter of the **greeting()** method. This query string parameter is not required. If it is absent in the request, the *defaultValue* of World is used. The value of the name parameter is added to a **Model object**, ultimately making it accessible to the **view template**.
+
+> The implementation of the method body relies on a view technology (in this case, **Thymeleaf**) to perform *server-side rendering of the HTML*. **Thymeleaf** parses the greeting.html template and evaluates the **th:text** expression to render the value of the **${name}** parameter that was set in the controller.
+
+> **Note**: The **greeting.html** template should be placed in the **src/main/resources/templates** directory.
+
+
+### Spring Boot Devtools
+
+A common feature of developing web applications is coding a change, restarting your application, and refreshing the browser to view the change. This entire process can eat up a lot of time. To speed up this refresh cycle, Spring Boot offers with a handy module known as **spring-boot-devtools**. Spring Boot Devtools:
+- Enables hot swapping.
+- Switches template engines to disable caching.
+- Enables LiveReload to automatically refresh the browser.
+- Other reasonable defaults based on development instead of production.
+
+### Run the Application
+
+By default, Spring Initializr generates a main class.
+
+```
+@SpringBootApplication
+public class ServingWebContentApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ServingWebContentApplication.class, args);
+    }
+
+}
+```
+
+**@SpringBootApplication** is a convenience annotation that adds all of the following:
+- **@Configuration**: Tags the class as a source of bean definitions for the application context.
+- **@EnableAutoConfiguration**: Tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings. For example, if **spring-webmvc** is on the classpath, this annotation flags the application as a web application and activates key behaviors, such as setting up a **DispatcherServlet**.
+- **@ComponentScan**: Tells Spring to look for other components, configurations, and services in the com/example package, letting it find the controllers.
+
+> **Note**: The main() method uses Spring Boot’s SpringApplication.run() method to launch an application.
+
+All we have to do know is **Build an executable JAR**:
+```
+$ ./mvnw spring-boot:run
+```
+OR
+```
+$ ./mvnw clean package
+$ java -jar target/gs-serving-web-content-0.1.0.jar
+```
+
+### Test the Application
+
+Now that the web site is running, visit http://localhost:8080/greeting, where you should see:
+```
+Hello, World!
+```
+
+Also, if we provide a name query string parameter, we can customize the greeting with an optional name. For example, http://localhost:8080/greeting?name=User will render a page like the following:
+```
+Hello, User!
+```
+
+### Add a Home Page
+
+Static resources, including HTML and JavaScript and CSS, can be served from your Spring Boot application by dropping them into the right place in the source code. By default, Spring Boot serves static content from resources in the classpath at **/static** (or /public).
+
+The **index.html resource is special** because, if it exists, it is used as a "`welcome page,"serving-web-content/ which means it is served up as the root resource (that is, at `http://localhost:8080/).
+
+> **Note**: Because we added the **Desvtools**, all we have to do is restart the server and the changes will be applied.
+
+### To change the port:
+
+We can change the port in the **application.properties** file:
+```
+server.port=8081
+```
+
+### Note:
+
+The implementation of Spring MVC relies on the Servlets engine, however, you do not need to
+“see” them. The abstraction layers available will provide the developer with more convenient, higher-
+level interfaces.
+
+## Building a RESTful Web Service
