@@ -232,3 +232,47 @@ The implementation of Spring MVC relies on the Servlets engine, however, you do 
 level interfaces.
 
 ## Building a RESTful Web Service
+
+Now we are going to add a REST endpoint to our application. This will return a JSON representation of a greeting, rather than a HTML page.
+
+### Create a Resource Representation Class
+
+The service will handle **GET** requests for **/greetingREST**, optionally with a name parameter in the query string. The **GET** request should return a **200 OK** response with JSON in the body that represents a greeting. It should resemble the following output:
+
+```
+{
+    "id": 1,
+    "content": "Hello, World!"
+}
+```
+
+> **Note**: The **id** field is a unique identifier for the greeting, and **content** is the textual representation of the greeting.
+
+To model the greeting representation, create a resource representation class. To do so, provide a Java record class for the **id** and **content** data.
+
+```
+public record Greeting(long id, String content) {}
+```
+
+> **Note**: This application uses the Jackson JSON library to automatically marshal instances of type Greeting into JSON. Jackson is included by default by the web starter.
+
+### Create a Resource Controller
+
+Just like the **Controller** shown before, we can create a **REST Controller**,
+using the **@RestController** annotation:
+
+```
+@RestController
+public class GreetingRESTController {
+
+	private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();
+
+	@GetMapping("/greetingREST")
+	public GreetingREST greetingREST(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return new GreetingREST(counter.incrementAndGet(), String.format(template, name));
+	}
+}
+```
+
+> **Note**: The implementation of the method body creates and returns a new **GreetingREST** object with id and content attributes based on the next value from the counter and formats the given name by using the greetingREST template.
