@@ -276,3 +276,39 @@ public class GreetingRESTController {
 ```
 
 > **Note**: The implementation of the method body creates and returns a new **GreetingREST** object with id and content attributes based on the next value from the counter and formats the given name by using the greetingREST template.
+
+
+
+A key difference between a traditional MVC controller and the RESTful web service controller shown earlier is the way that the HTTP response body is created. Rather than relying on a view technology to perform server-side rendering of the greeting data to HTML, this RESTful web service controller populates and returns a Greeting object. The object data will be written directly to the HTTP response as JSON.
+
+### Test the Service
+
+**Curl** is a command-line tool for transferring data and supports HTTP. To test the service we can use the following command:
+
+```
+$ curl localhost:8081/greetingREST
+``` 
+
+The output should resemble the following:
+
+```
+{"id":1,"content":"Hello, World!"}
+```
+
+We can provide a **name** query string parameter as follows:
+
+```
+$ curl 'localhost:8081/greetingREST?name=User'
+```
+
+The output should resemble the following:
+
+```
+{"id":2,"content":"Hello, User!"}
+```
+
+We can also use the **-o** flag to save the output to a file:
+
+```
+$ curl 'localhost:8081/greetingREST?name=User' -o greetingUser.json
+```
