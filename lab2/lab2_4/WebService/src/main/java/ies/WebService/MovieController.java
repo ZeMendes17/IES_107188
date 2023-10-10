@@ -1,6 +1,7 @@
 package ies.WebService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -19,6 +20,21 @@ public class MovieController {
         Movie movie = randomMovie();
         String quote = randomQuote(movie);
         return new QuoteRepresentation(counter.incrementAndGet(), movie.getTitle(), quote);
+    }
+
+    @GetMapping("/api/shows")
+    public ShowsRepresentation shows() {
+        List<String[]> s = new ArrayList<>();
+        for (long id : getShows().keySet()) {
+            s.add(new String[]{String.valueOf(id), getShows().get(id)});
+        }
+        return new ShowsRepresentation(counter.incrementAndGet(), s);
+    }
+
+    @GetMapping("/api/quotes")
+    public QuotesRepresentation quotes(@RequestParam(value = "show") long show) {
+        List<String> q = getQuotes(show);
+        return new QuotesRepresentation(counter.incrementAndGet(), getShows().get(show), q);
     }
 
     private List<Movie> getMovies() {
@@ -79,7 +95,7 @@ public class MovieController {
         return movie.getQuotes().get(quoteIndex);
     }
 
-    private Map<Long, String> shows(){
+    private Map<Long, String> getShows(){
         Map<Long, String> shows = new HashMap<>();
 
         for (Movie movie : movies) {
@@ -88,7 +104,7 @@ public class MovieController {
         return shows;
     }
 
-    private List<String> quotes(long id){
+    private List<String> getQuotes(long id){
         for (Movie movie : movies) {
             if (movie.getId() == id) {
                 return movie.getQuotes();
