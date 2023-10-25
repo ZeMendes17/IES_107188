@@ -67,3 +67,105 @@ public class PersonController {
 ```
 
 The controller class relies on some of Spring MVC’s key features. For a detailed guide on Spring MVC, check out our Spring MVC tutorial.
+
+Let's create some GET/POST methods to see how this works in practice.
+First we want to show the signup form:
+
+```
+@GetMapping("/signup")
+public String showSignUpForm(Person person) {
+    return "add-person";
+}
+```
+> This GET method returns the template **add-person.html**.
+
+Now we want to save the person in the database, for that we need a POST method:
+
+```
+@PostMapping("/addperson")
+public String addPerson(@Valid Person person, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+        return "add-person";
+    }
+    
+    personRepository.save(person);
+    return "redirect:/index";
+}
+```
+> This method receives a **Person** object, validates it and saves it in the database. If the object is not valid, it redisplays the template **add-person.html**. If the object is valid, it saves it in the database and redirects to the template **index.html**.
+
+It is also necessary to map the **/index** URL, in this case, it will show all the people in the database, thus we need to pass the list as an attribute:
+
+```
+@GetMapping("/index")
+public String showPersonList(Model model) {
+    model.addAttribute("people", personRepository.findAll());
+    return "index";
+}
+```
+> As we can see, the repository has a method **findAll()** that returns all the people in the database.
+
+Finnaly we will map, **/edit/{id}**, **/update/{id}** and **/delete/{id}** URLs. The first one will show the template **update-person.html** with the person to edit, the second one will update the person in the database and the last one will delete the person from the database.
+
+```
+@GetMapping("/edit/{id}")
+public String showUpdateForm(@PathVariable("id") long id, Model model) {
+    Person person = personRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid person Id:" + id));
+
+    model.addAttribute("person", person);
+    return "update-person";
+}
+
+@PostMapping("/update/{id}")
+public String updatePerson(@PathVariable("id") long id, @Valid Person person, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+        person.setId(id);
+        return "update-person";
+    }
+
+    personRepository.save(person);
+    return "redirect:/index";
+}
+
+@GetMapping("/delete/{id}")
+public String deletePerson(@PathVariable("id") long id, Model model) {
+    Person person = personRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid person Id:" + id));
+    personRepository.delete(person);
+    return "redirect:/index";
+}
+```
+> The **@PathVariable** annotation indicates that the method parameter should be bound to a URI template variable
+
+> The **@Valid** annotation makes sure that the object passed in is valid according to the validation constraints we set in our Person class.
+
+### The View Layer
+
+At this point, we’ve implemented a functional controller class that performs CRUD operations on Person entities. Even so, there’s still a missing component in this schema: the view layer.
+
+Under the src/main/resources/templates folder, we need to create the HTML templates required for displaying the signup form and the update form as well as rendering the list of persisted Person entities.
+
+## Exercise c)
+
+1. The “UserController” class gets an instance of “userRepository” through its constructor; how is this new repository instantiated?
+
+- We use the annotation **@Autowired** to indicate that the constructor is autowired, this means that the Spring container will automatically inject an instance of the **UserRepository** class into the constructor when it creates the **UserController** class.
+This feature enables you to inject the object dependency implicitly. It internally uses setter or constructor injection.
+
+2. List the methods invoked in the “userRepository” object by the “UserController”. Where are these methods defined?
+
+- The methods invoked in the **userRepository** object are **findAll()**, **findById()**, **save()** and **delete()**.
+These methods are defined in the **CrudRepository** interface.
+
+3. Where is the data being saved?
+
+- The data is being saved in the **H2** database. By default, Spring Boot configures the application to connect to an in-memory store when using H2, so all data is lost when the application stops.
+
+4. Where is the rule for the “not empty” email address defined?
+
+- The rule for the “not empty” email address is defined in the **User** class with the annotation **@NotBlank** with the message **"Email is mandatory"**.
+
+## Adding a new field to the entity
+
+This can be done by adding a new attribute (e.g **phone number**) to the **Person** class, creating a getter, a setter and updating the contructor. Finnaly, we need to add the corresponding attribute to the templates (**index.html**, **add-person.html** and **update-person.html**).

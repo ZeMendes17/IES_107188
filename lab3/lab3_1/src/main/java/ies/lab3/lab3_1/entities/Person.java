@@ -19,14 +19,18 @@ public class Person {
     @NotBlank(message = "Email is mandatory")
     private String email;
 
+    @NotBlank(message = "Phone Number is mandatory")
+    private String phoneNumber;
+
     // Constructors
     public Person() {
 
     }
 
-    public Person(String name, String email) {
+    public Person(String name, String email, String phoneNumber) {
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
     }
 
     // Getters and Setters
@@ -40,6 +44,10 @@ public class Person {
         return this.email;
     }
 
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -50,11 +58,15 @@ public class Person {
         this.email = email;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     // toString
 
     @Override
     public String toString() {
-        return "Person [id=" + this.id + ", name=" + this.name + ", email=" + this.email + "]";
+        return "Person [id=" + this.id + ", name=" + this.name + ", email=" + this.email + ", phoneNumber=" + this.phoneNumber + "]";
     }
 
 }

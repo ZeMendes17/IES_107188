@@ -15,6 +15,9 @@
     <label for="email">Email</label>
     <input type="text" th:field="*{email}" id="email" placeholder="Email">
     <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    <label for="phoneNumber">Phone Number</label>
+    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="Phone Number">
+    <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
     <input type="submit" value="Update Person">
   </form>
 </body>

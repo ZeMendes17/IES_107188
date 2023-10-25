@@ -2,6 +2,7 @@ package ies.lab3.lab3_1.controllers;
 
 import ies.lab3.lab3_1.entities.Person;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +16,7 @@ public class PersonController {
 
     private final PersonRepository personRepository;
 
-    // @Autowired
+    @Autowired
     public PersonController(PersonRepository personRepository) {
         this.personRepository = personRepository;
     }
