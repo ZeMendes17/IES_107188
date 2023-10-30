@@ -146,7 +146,7 @@ At this point, we’ve implemented a functional controller class that performs C
 
 Under the src/main/resources/templates folder, we need to create the HTML templates required for displaying the signup form and the update form as well as rendering the list of persisted Person entities.
 
-## Exercise c)
+### Exercise c)
 
 1. The “UserController” class gets an instance of “userRepository” through its constructor; how is this new repository instantiated?
 
@@ -166,6 +166,93 @@ These methods are defined in the **CrudRepository** interface.
 
 - The rule for the “not empty” email address is defined in the **User** class with the annotation **@NotBlank** with the message **"Email is mandatory"**.
 
-## Adding a new field to the entity
+### Adding a new field to the entity
 
 This can be done by adding a new attribute (e.g **phone number**) to the **Person** class, creating a getter, a setter and updating the contructor. Finnaly, we need to add the corresponding attribute to the templates (**index.html**, **add-person.html** and **update-person.html**).
+
+## Multilayer applications: exposing data with REST interface
+
+For this lab we will use an instance of MySQL server (versio 5.7) to store Employee information.
+
+To host the database server let's use a Docker container. To do this, we will use the following command:
+
+```
+$ docker run --name mysql5 -e MYSQL_ROOT_PASSWORD=secret1 -e MYSQL_DATABASE=demo -e MYSQL_USER=demo -e MYSQL_PASSWORD=secret2 -p 33060:3306 -d mysql/mysql-server:5.7
+```
+
+The next step is to create a SpringBoot project with the following dependencies:
+- Spring Web
+- Spring Data JPA
+- MySQL Driver
+- DevTools
+- Validation
+
+
+
+### Configuring the application
+
+In the **application.properties** file we need to add the following lines:
+
+```
+spring.datasource.url=jdbc:mysql://localhost:33060/demo
+spring.datasource.username=demo
+spring.datasource.password=secret2
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+spring.jpa.hibernate.ddl-auto=update
+```
+> The last line is used for database initialization. I’ve used the value “update” for this property to create the database tables automatically.
+
+Here we have 2 new annotations in the Entity, **Table** and **Column**. The first one is used to specify the name of the table in the database. The second one is used to specify the name of the column in the database.
+
+We also have a new annotation in the Controller, **RequestBody**. This annotation is used to bind the HTTP request body with a domain object in method parameter or return type.
+
+#### Methods in the Controller
+
+- @GetMapping("/employees") - This method returns all the employees in the database.
+- @PostMapping("/employees") - This method saves an employee in the database.
+- @GetMapping("/employees/{id}") - This method returns an employee with a specific id.
+- @PutMapping("/employees/{id}") - This method updates an employee with a specific id.
+- @DeleteMapping("/employees/{id}") - This method deletes an employee with a specific id.
+
+#### Testing our application endpoints using Postman utility
+
+- GET http://localhost:8080/employees - Before adding any employee:
+
+![Empty Get](postman_screenshots/get_empty.png)
+
+- POST http://localhost:8080/employees - Adding an employee:
+
+![Post](postman_screenshots/post.png)
+
+- GET http://localhost:8080/employees - After adding 2 employees:
+
+![Get After Post](postman_screenshots/get_afterPost.png)
+
+- PUT http://localhost:8080/employees/{id} - Updating an employee:
+
+![Put](postman_screenshots/put.png)
+
+- DELETE http://localhost:8080/employees/{id} - Deleting an employee:
+
+![Delete](postman_screenshots/delete.png)
+
+- GET http://localhost:8080/employees/{id} - After deleting an employee and updating the other:
+
+![Get After Delete And Update](postman_screenshots/get_final.png)
+
+#### Method to search an employee by email (search by email)
+
+Using **@RequestParam(required = false) String email** in the method parameter, we can search an employee by email. If the email is not specified, it returns all the employees in the database, that is why we use **required = false**.
+If the email is specified we use the method **findByEmail()** in the repository to search the employee by email.
+We can search by email using the following URL: http://localhost:8080/employees?email=green@mail.com
+
+Example:
+
+- Before using the search by email:
+
+![No Filter](postman_screenshots/no_filter.png)
+
+- Using it:
+
+![Filter](postman_screenshots/filter.png)
