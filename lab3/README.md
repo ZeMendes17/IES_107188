@@ -256,3 +256,8 @@ Example:
 - Using it:
 
 ![Filter](postman_screenshots/filter.png)
+
+
+./mvnw install
+docker build -t ies_lab3_3 .
+docker run --network=host -p 8080:8080 ies_lab3_3
