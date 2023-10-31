@@ -21,21 +21,14 @@ public class QuoteController {
 
     @GetMapping("/quotes")
     public List<Quote> getAllQuotes() {
-        System.out.println(quoteService.getQuotes());
         return quoteService.getQuotes();
     }
 
-    @PostMapping("/addQuote/show/{id}")
+    @PostMapping("/quotes/show/{id}")
     public Quote addQuote(@Valid @RequestBody Quote quote, @PathVariable(value = "id") Long movieId) {
         Movie movie = movieService.getMovieById(movieId);
         quote.setMovie(movie);
         return quoteService.saveQuote(quote);
-    }
-
-
-    @PostMapping("/addQuotes")
-    public List<Quote> addQuotes(List<Quote> quotes) {
-        return quoteService.saveQuotes(quotes);
     }
 
     @GetMapping("/quotes/{id}")
@@ -58,7 +51,7 @@ public class QuoteController {
         return quoteService.getQuotesByMovieId(movieId);
     }
 
-    @PostMapping("/addShow")
+    @PostMapping("/shows")
     public Movie addShow(@Valid @RequestBody Movie movie) {
         return movieService.saveMovie(movie);
     }

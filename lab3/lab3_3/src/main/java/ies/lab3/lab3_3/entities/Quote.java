@@ -15,7 +15,7 @@ public class Quote {
     @Column(name = "quote")
     private String quote;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
