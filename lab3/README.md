@@ -258,6 +258,120 @@ Example:
 ![Filter](postman_screenshots/filter.png)
 
 
-./mvnw install
+
+### Adding a intermediary Service Layer
+
+The service layer is an intermediary between the controller layer and the repository layer. It is used to implement business logic and data manipulation. It is also used to reduce the code in the controller layer.
+
+To implement, we call the methods in the repository layer in the service layer. Then we call the methods in the service layer in the controller layer, using
+the **@Autowired** annotation in both like before.
+
+The service layer implements methods like:
+
+- findAll()
+- findById()
+- save()
+- delete()
+- update()
+- ...
+
+## How to Dockerize a Spring Boot Application
+
+### Create a Dockerfile
+
+First we need to run the command **./mvnw install** to create the **.jar** file.
+
+Then we need to create a **Dockerfile** in the root directory of the project:
+
+```
+FROM eclipse-temurin:17-jdk-alpine
+VOLUME /tmp
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+Then we need to build and run the Docker image:
+
+```
 docker build -t ies_lab3_3 .
 docker run --network=host -p 8080:8080 ies_lab3_3
+```
+
+> The **--network=host** option is used to connect the container to the host network. This is necessary to connect to the database.
+
+### Create a docker-compose.yml file
+
+We can also create a **docker compose** file to run the application and the database at the same time. Making it easier to run the application.
+
+```
+version: '3.8'
+
+services:
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+      - MYSQL_USER=$MYSQLDB_USER
+      - MYSQL_PASSWORD=$MYSQLDB_PASSWORD
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+
+  app:
+    depends_on:
+      - mysqldb
+    build: .
+    restart: on-failure
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+              "spring.datasource.url"  : "jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false",
+              "spring.datasource.username" : "$MYSQLDB_USER",
+              "spring.datasource.password" : "$MYSQLDB_PASSWORD",
+              "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQLDialect",
+              "spring.jpa.hibernate.ddl-auto" : "update"
+            }'
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
+
+
+
+volumes:
+    db:
+```
+
+> The **.env** file is used to store the environment variables.
+
+> The **SPRING_APPLICATION_JSON** environment variable is used to configure the application, using the **application.properties** file.
+
+As we can see, we have 2 services, **mysqldb** and **app**. Both need to define the environment variables, ports and volumes.
+
+The environment variables are defined in the **.env** file:
+    
+```
+MYSQLDB_USER=demo
+MYSQLDB_ROOT_PASSWORD=secret1
+MYSQLDB_DATABASE=demo
+MYSQLDB_PASSWORD=secret2
+MYSQLDB_LOCAL_PORT=33060
+MYSQLDB_DOCKER_PORT=3306
+
+SPRING_LOCAL_PORT=6868
+SPRING_DOCKER_PORT=8080
+```
+
+Finally, we can run the application using the following command:
+
+```
+docker-compose up
+```
+
+To access the application we can use the port **6868** in this case.
