@@ -4,6 +4,6 @@ Labs developed for the Introduction to Software Engineering class
 
 ## Grades
 
-**lab01** : 18.4 </br>
-**lab02** : 19.6 </br>
-**lab03** : 20.0 </br>
+**lab1** : 18.4 </br>
+**lab2** : 19.6 </br>
+**lab3** : 20.0 </br>
